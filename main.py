@@ -1,6 +1,7 @@
 
 import requests
 import time
+from datetime import datetime
 from bs4 import BeautifulSoup
 from colorama import Fore,Style
 from sources import*
@@ -149,6 +150,7 @@ def generate_exchange(sources,allowable_tolerance_in_average,debug_mode):
 
     average = sum_of_values/num_of_values
 
+    
 
             
     if debug_mode:
@@ -166,11 +168,9 @@ def generate_exchange(sources,allowable_tolerance_in_average,debug_mode):
             elif data_frame[7] == None:
                 print("\n" +  f"{Fore.GREEN}The source: {Style.RESET_ALL}" + str(data_frame[0]) + " " + str(data_frame[1]) + f"{Fore.GREEN} is OK {Style.RESET_ALL} \n")
         
+        print("\n" + str(datetime.now())) 
         print ("____________________________________________END OF THE TEST___________________________________________\n\n")
     
-
-
-
 
 
 
@@ -179,13 +179,13 @@ def generate_exchange(sources,allowable_tolerance_in_average,debug_mode):
 
 
 
-for i in range(1):
+while 1:
 
-    USD_to_EUR = (generate_exchange(USDtoEUR,0.2,True))
+    USD_to_EUR = (generate_exchange(USDtoEUR,0.05,True))
     USD_to_GBP = (generate_exchange(USDtoGBP,0.05,True))
 
 
     print(USD_to_EUR,USD_to_GBP)
-    time.sleep(1)
+    time.sleep(60)
 
 
