@@ -11,20 +11,51 @@ from sources import*
 def generate_exchange(sources,allowable_tolerance_in_average,debug_mode):
 
 
+    ID='ID'
+    URL='URL'
+    KEYWORD='KEYWORD'
+    INIT='INIT'
+    END='END'
+    KEYWORD_POSITION='KEYWORD_POSITION'
+    VALUE='VALUE'
+    DIAGNOSIS='DIAGNOSIS'
+
+    URL_BROKEN='url broken'
+    OUT_OF_AVERAGE='out of average'
+
+
+
+
+
     data_frames = []
         
 
-    for url_and_parameter in sources:
+    for source in sources:
+
+        source_dic = {
+        ID                : source[0],
+        URL               : source[1],
+        KEYWORD           : source[2],
+        INIT              : source[3],
+        END               : source[4],
+        KEYWORD_POSITION  : None,
+        VALUE             : None,
+        DIAGNOSIS         : None
+        }
+
+
+
+
             
-        r = requests.get(url_and_parameter[1])
+        r = requests.get(source_dic[URL])
         datos = r.text
         soup = BeautifulSoup(datos,"lxml")
         soup = str(soup)
 
-        keyword_position = soup.find(url_and_parameter[2])
-        value = soup [keyword_position+url_and_parameter[3] : keyword_position + url_and_parameter[4]]
+        keyword_position = soup.find(source_dic[KEYWORD])
+        value = soup [keyword_position+source_dic[INIT] : keyword_position + source_dic[END]]
 
-        
+        source_dic.update({KEYWORD_POSITION : keyword_position})
 
             
 
@@ -32,71 +63,40 @@ def generate_exchange(sources,allowable_tolerance_in_average,debug_mode):
 
             try:
                 value = float(value.replace(",","."))
-                data_frames.append([
-                    url_and_parameter[0],                   #0
-                    url_and_parameter[1],                   #1
-                    url_and_parameter[2],                   #2
-                    url_and_parameter[3],                   #3
-                    url_and_parameter[4],                   #4
-                    keyword_position,                       #5
-                    float(value),                           #6
-                    None                                    #7
-                    ])
+                source_dic.update({
+                    VALUE : float(value),
+                    DIAGNOSIS : None 
+                    })
 
-            except ValueError:            
-                data_frames.append([
-                    url_and_parameter[0],                   #0
-                    url_and_parameter[1],                   #1
-                    url_and_parameter[2],                   #2
-                    url_and_parameter[3],                   #3
-                    url_and_parameter[4],                   #4
-                    keyword_position,                       #5
-                    value,                                  #6
-                    "url broken"                            #7
-                    ])
-
+            except ValueError:
+                source_dic.update({
+                    VALUE : value,
+                    DIAGNOSIS : URL_BROKEN
+                    })            
 
 
         elif "." in value:
 
             try:                
-                data_frames.append([
-                    url_and_parameter[0],                   #0
-                    url_and_parameter[1],                   #1
-                    url_and_parameter[2],                   #2
-                    url_and_parameter[3],                   #3
-                    url_and_parameter[4],                   #4
-                    keyword_position,                       #5
-                    float(value),                           #6
-                    None                                    #7
-                    ])
+                source_dic.update({
+                    VALUE : float(value),
+                    DIAGNOSIS : None
+                })
 
             except ValueError:
-                data_frames.append([
-                    url_and_parameter[0],                   #0
-                    url_and_parameter[1],                   #1
-                    url_and_parameter[2],                   #2
-                    url_and_parameter[3],                   #3
-                    url_and_parameter[4],                   #4
-                    keyword_position,                       #5
-                    value,                                  #6
-                    "url broken"                            #7
-                    ])
+                source_dic.update({
+                    VALUE : value,
+                    DIAGNOSIS : URL_BROKEN
+                })
 
         else:
-            data_frames.append([
-                    url_and_parameter[0],                   #0
-                    url_and_parameter[1],                   #1
-                    url_and_parameter[2],                   #2
-                    url_and_parameter[3],                   #3
-                    url_and_parameter[4],                   #4
-                    keyword_position,                       #5
-                    value,                                  #6
-                    "url broken"                            #7
-                    ])
-    
-
+            source_dic.update({
+                VALUE : value,
+                DIAGNOSIS : URL_BROKEN
+            })
         
+        data_frames.append(source_dic)
+    
 
     
 
@@ -104,10 +104,10 @@ def generate_exchange(sources,allowable_tolerance_in_average,debug_mode):
     sum_of_values=0.
     num_of_values=0
 
-    for data_frame in data_frames:
-        if data_frame[7] == None:
+    for source_dic in data_frames:
+        if source_dic[DIAGNOSIS] == None:
             num_of_values += 1
-            sum_of_values += data_frame[6]
+            sum_of_values += source_dic[VALUE]
             
 
     provisional_average = sum_of_values/num_of_values
@@ -118,34 +118,30 @@ def generate_exchange(sources,allowable_tolerance_in_average,debug_mode):
 
     data_frames_in_average = []
 
-    for data_frame in data_frames:
-        if data_frame[7] == None:
-            if ((provisional_average - out_of_tolerance) > data_frame[6]) or ((provisional_average + out_of_tolerance) < data_frame[6]):
-                data_frames_in_average.append([
-                    data_frame[0],                   #0
-                    data_frame[1],                   #1
-                    data_frame[2],                   #2
-                    data_frame[3],                   #3
-                    data_frame[4],                   #4
-                    data_frame[5],                   #5
-                    data_frame[6],                   #6
-                    "out of average"                 #7
-                    ])
+    for source_dic in data_frames:
+        if source_dic[DIAGNOSIS] == None:
+
+            if ((provisional_average - out_of_tolerance) > source_dic[VALUE]) or ((provisional_average + out_of_tolerance) < source_dic[VALUE]):
+                
+                source_dic.update({
+                    DIAGNOSIS : OUT_OF_AVERAGE
+                    })
+                data_frames_in_average.append(source_dic)
 
             else:
-                data_frames_in_average.append(data_frame)
+                data_frames_in_average.append(source_dic)
         else:
-            data_frames_in_average.append(data_frame)
+            data_frames_in_average.append(source_dic)
 
             
     
     sum_of_values=0.
     num_of_values=0
 
-    for data_frame in data_frames_in_average:
-        if data_frame[7] == None:
+    for source_dic in data_frames_in_average:
+        if source_dic[DIAGNOSIS] == None:
             num_of_values += 1
-            sum_of_values += data_frame[6]
+            sum_of_values += source_dic[VALUE]
             
 
     average = sum_of_values/num_of_values
@@ -157,35 +153,33 @@ def generate_exchange(sources,allowable_tolerance_in_average,debug_mode):
 
         print ("\n\n____________________________________________RUNNING THE TEST___________________________________________")
 
-        for data_frame in data_frames_in_average:
+        for source_dic in data_frames_in_average:
             
-            if data_frame[7] == "url broken":
-                print ("\n" +  f"{Fore.RED}The source: {Style.RESET_ALL}" + str(data_frame[0]) + " " + str(data_frame[1]) + f"{Fore.RED} is broken, please, check out the parameters of data position. \n {Style.RESET_ALL}" +     f"{Fore.BLUE}In this position: {Style.RESET_ALL}" + str(data_frame[5]) + f"{Fore.BLUE} there are these data in the parameter range: \n\n{Style.RESET_ALL}" + data_frame[6] + "\n")
+            if source_dic[DIAGNOSIS] == URL_BROKEN:
+                print ("\n" +  f"{Fore.RED}The source: {Style.RESET_ALL}" + str(source_dic[ID]) + " " + str(source_dic[URL]) + f"{Fore.RED} is broken, please, check out the parameters of data position. \n {Style.RESET_ALL}" +     f"{Fore.BLUE}In this position: {Style.RESET_ALL}" + str(source_dic[KEYWORD_POSITION]) + f"{Fore.BLUE} there are these data in the parameter range: \n\n{Style.RESET_ALL}" + source_dic[VALUE] + "\n")
 
-            elif data_frame[7] == "out of average":
-                print ("\n" +  f"{Fore.RED}The source: {Style.RESET_ALL}" + str(data_frame[0]) + " " + str(data_frame[1]) + f"{Fore.RED} is out of tolerance, the value: {Style.RESET_ALL}" + str(data_frame[6]) + f"{Fore.RED} ​​are to far of the average, the average is: {Style.RESET_ALL}" + str(provisional_average) + f"{Fore.RED} (adjust allowed average parameter or delete this source). {Style.RESET_ALL}" + "\n")
+            elif source_dic[DIAGNOSIS] == OUT_OF_AVERAGE:
+                print ("\n" +  f"{Fore.RED}The source: {Style.RESET_ALL}" + str(source_dic[ID]) + " " + str(source_dic[URL]) + f"{Fore.RED} is out of tolerance, the value: {Style.RESET_ALL}" + str(source_dic[VALUE]) + f"{Fore.RED} ​​are to far of the average, the average is: {Style.RESET_ALL}" + str(provisional_average) + f"{Fore.RED} (adjust allowed average parameter or delete this source). {Style.RESET_ALL}" + "\n")
 
-            elif data_frame[7] == None:
-                print("\n" +  f"{Fore.GREEN}The source: {Style.RESET_ALL}" + str(data_frame[0]) + " " + str(data_frame[1]) + f"{Fore.GREEN} is OK {Style.RESET_ALL} \n")
+            elif source_dic[DIAGNOSIS] == None:
+                print("\n" +  f"{Fore.GREEN}The source: {Style.RESET_ALL}" + str(source_dic[ID]) + " " + str(source_dic[URL]) + f"{Fore.GREEN} is OK {Style.RESET_ALL} \n")
         
         print("\n" + str(datetime.now())) 
         print ("____________________________________________END OF THE TEST___________________________________________\n\n")
     
-
-
 
     return average
 
 
 
 
-while 1:
-
-    USD_to_EUR = (generate_exchange(USDtoEUR,0.05,True))
-    USD_to_GBP = (generate_exchange(USDtoGBP,0.05,True))
 
 
-    print(USD_to_EUR,USD_to_GBP)
-    time.sleep(60)
+USD_to_EUR = (generate_exchange(USDtoEUR,0.05,True))
+USD_to_GBP = (generate_exchange(USDtoGBP,0.05,True))
+
+
+print(USD_to_EUR,USD_to_GBP)
+time.sleep(6)
 
 

@@ -9,7 +9,7 @@ Urls and parameters
 USDtoEUR = [
     ["EUR 00","https://www.xe.com/es/currencyconverter/convert/?Amount=1&From=EUR&To=USD","USD =",6,14],
     ["EUR 01","https://themoneyconverter.com/ES/USD/EUR","USD =",6,14],
-    ["EUR 02","https://themoneyconverter.com/ES/USD/EUR","USD =",6,14],
+    ["EUR 02","https://themoneyconverter.com/ES/USD/EUR","USD =",6,140],
     ["EUR 03","https://www.eleconomista.es/cruce/USDEUR","ultimo_307 last-value",23,30],
 ]
 
