@@ -48,13 +48,19 @@ def generator_exchange():
             connection = sqlite3.connect('database.db')
             cursor = connection.cursor()
 
-            cursor.executemany("INSERT INTO currency_exchange VALUES (null,?,julianday('now'),?)",coins)
+            cursor.executemany("""
+            INSERT INTO currency_exchange VALUES (
+                null,
+                ?,
+                julianday('now'),
+                ?)""",
+                coins)
 
             connection.commit()
             connection.close()
 
                        
-            time.sleep(10)
+            #time.sleep(10)
         
 
 
