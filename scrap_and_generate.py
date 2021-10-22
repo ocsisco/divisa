@@ -1,6 +1,5 @@
 
 import requests
-import time
 from datetime import datetime
 from bs4 import BeautifulSoup
 from colorama import Fore,Style
@@ -173,13 +172,5 @@ def generate_exchange(sources,allowable_tolerance_in_average,debug_mode):
 
 
 
-
-
-USD_to_EUR = (generate_exchange(USDtoEUR,0.05,True))
-USD_to_GBP = (generate_exchange(USDtoGBP,0.05,True))
-
-
-print(USD_to_EUR,USD_to_GBP)
-time.sleep(6)
 
 
