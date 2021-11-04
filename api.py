@@ -1,81 +1,26 @@
 from flask import Flask, jsonify, request
-
-import time
-from datetime import datetime,timedelta
-import os
 from multiprocessing import Process
-import sqlite3
 
-from scrap_and_generate import *
-
+from db_config import*
 
 
 
-connection = sqlite3.connect('database.db')
-cursor = connection.cursor()
+db_creator()
 
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS currency_exchange(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name_coin varchar(255),
-    datetime ,
-    coinvalue float(255)
-);
-""")
-
-connection.commit()
-connection.close()
-
-
-
-
-def generator_exchange():
-        while 1:
-
-            GBP = (generate_exchange(USDtoGBP,0.05,False))
-            EUR = (generate_exchange(USDtoEUR,0.05,False))
-
-
-
-
-            coins = [
-                ("GBP",GBP),
-                ("EUR",EUR),
-            ]
-
-
-
-            connection = sqlite3.connect('database.db')
-            cursor = connection.cursor()
-
-            cursor.executemany("""
-            INSERT INTO currency_exchange VALUES (
-                null,
-                ?,
-                datetime('now'),
-                ?)""",
-                coins)
-
-            connection.commit()
-            connection.close()
-
-                       
-            #time.sleep(10)
-        
 
 
 if __name__=='__main__':
 
-        generator_exchang = Process(target=generator_exchange)
-        generator_exchang.start()
+        bd_data_engine = Process(target=db_data_generator)
+        bd_data_engine.start()
         
-
-
 
 
 
 
 app = Flask(__name__)
+
+
 
 
 @app.route("/fetch-one")
@@ -110,8 +55,6 @@ def fetch_one():
         base_value = 1.
         date_value = "null"
         
-
-
     date_values[base]=date_value
 
 
@@ -135,13 +78,13 @@ def fetch_one():
         result_value = 1.
         date_value = "null"
         
-
-
     date_values[result]=date_value
 
 
-
-    updated = date_values.get(min(date_values))
+    if base == result:
+        updated = "null"
+    else:
+        updated = date_values.get(min(date_values))
 
 
 
@@ -167,37 +110,36 @@ def fetch_multi():
 
     values = {}
     date_values = {}
-    
+
+
+
+    if base != "USD":
+
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+
+        cursor.execute("SELECT MAX(id),name_coin,datetime,coinvalue FROM currency_exchange WHERE name_coin=? ",(base,))
+        cursor = cursor.fetchall()
+
+        connection.commit()
+        connection.close()
+
+        base_value = float(cursor[0][3])
+        date_value = cursor[0][2]
+
+        base_value = 1/base_value
+
+    else:
+            
+        date_value = "null"
+        base_value = 1.
+
+    date_values[base]=date_value
+
+
 
 
     for name_of_coin_in_result in results:
-
-
-        if base != "USD":
-
-            connection = sqlite3.connect('database.db')
-            cursor = connection.cursor()
-
-            cursor.execute("SELECT MAX(id),name_coin,datetime,coinvalue FROM currency_exchange WHERE name_coin=? ",(base,))
-            cursor = cursor.fetchall()
-
-            connection.commit()
-            connection.close()
-
-            base_value = float(cursor[0][3])
-            date_value = cursor[0][2]
-
-            base_value = 1/base_value
-
-        else:
-            
-            date_value = "null"
-            base_value = 1.
-
-
-
-        date_values[base]=date_value
-
 
 
         if name_of_coin_in_result != "USD":
@@ -253,7 +195,109 @@ def fetch_multi():
 
 @app.route("/fetch-all")
 def fetch_all():
-    return()
+
+    base = request.args.get("from")
+    
+    values = {}
+    date_values = {}
+
+
+    if base != "USD":
+
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+
+        cursor.execute("SELECT MAX(id),name_coin,datetime,coinvalue FROM currency_exchange WHERE name_coin=? ",(base,))
+        cursor = cursor.fetchall()
+
+        connection.commit()
+        connection.close()
+
+        base_value = float(cursor[0][3])
+        date_value = cursor[0][2]
+
+        base_value = 1/base_value
+
+    else:
+            
+        date_value = "null"
+        base_value = 1.
+
+
+
+
+
+    connection = sqlite3.connect('database.db')
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT DISTINCT name_coin FROM currency_exchange")
+    cursor = cursor.fetchall()
+
+    connection.commit()
+    connection.close()
+
+
+    for name_of_coin in cursor:
+        name_of_coin = name_of_coin[0]
+
+
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+
+        cursor.execute("SELECT MAX(id),name_coin,datetime,coinvalue FROM currency_exchange WHERE name_coin=? ",(name_of_coin,))
+        cursor = cursor.fetchall()
+
+        connection.commit()
+        connection.close()
+
+        result_value = float(cursor[0][3])
+        date_value = cursor[0][2]
+            
+
+        
+
+        date_values[name_of_coin]=date_value
+
+
+
+
+
+
+        value = round((base_value * result_value),5)
+        values[name_of_coin]=value
+
+    values["USD"]=round((base_value),5)
+
+        
+        
+
+
+
+
+    updated = date_values.get(min(date_values))
+
+    
+    
+
+    dataframe = { "base":base , "results":values , "updated": updated}
+    
+
+        
+    return jsonify(dataframe)
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
 
 @app.route("/convert")
 def convert():
