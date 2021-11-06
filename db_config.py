@@ -37,8 +37,8 @@ def db_data_generator():
 
 
             coins = [
-                ("GBP",GBP),
-                ("EUR",EUR),
+                (GBP),
+                (EUR),
             ]
 
 
@@ -58,5 +58,5 @@ def db_data_generator():
             connection.close()
 
                        
-            time.sleep(60)
+            time.sleep(6)
         

@@ -11,6 +11,7 @@ def generate_exchange(sources,allowable_tolerance_in_average,debug_mode):
 
 
     ID='ID'
+    COIN='COIN'
     URL='URL'
     KEYWORD='KEYWORD'
     INIT='INIT'
@@ -33,10 +34,11 @@ def generate_exchange(sources,allowable_tolerance_in_average,debug_mode):
 
         source_dic = {
         ID                : source[0],
-        URL               : source[1],
-        KEYWORD           : source[2],
-        INIT              : source[3],
-        END               : source[4],
+        COIN              : source[1],
+        URL               : source[2],
+        KEYWORD           : source[3],
+        INIT              : source[4],
+        END               : source[5],
         KEYWORD_POSITION  : None,
         VALUE             : None,
         DIAGNOSIS         : None
@@ -167,7 +169,7 @@ def generate_exchange(sources,allowable_tolerance_in_average,debug_mode):
         print ("____________________________________________END OF THE TEST___________________________________________\n\n")
     
 
-    return average
+    return source_dic[COIN],average
 
 
 
