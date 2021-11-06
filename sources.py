@@ -3,7 +3,7 @@ Urls and parameters
 
 ["id","url","keyword",init,end]
 
-https://www.fastforex.io/?gclid=CjwKCAjw5c6LBhBdEiwAP9ejGxJ-SAeKbddTgWSHrrlFfstgOQFVFnX1FtGGvVrgFb3vqXE9-r0I8RoCaD4QAvD_BwE
+https://www.fastforex.io/?gclid=
 
 """
 
