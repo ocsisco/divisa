@@ -278,7 +278,85 @@ def fetch_all():
 
 @app.route("/convert")
 def convert():
-    return()
+
+
+    base = request.args.get("from")
+    result = request.args.get("to")
+    amount = request.args.get("amount")
+
+    date_values = {}
+    date_value = "null"
+
+
+    if base != "USD":
+
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+
+        cursor.execute("SELECT MAX(id),name_coin,datetime,coinvalue FROM currency_exchange WHERE name_coin=? ",(base,))
+        cursor = cursor.fetchall()
+
+        connection.commit()
+        connection.close()
+
+        
+        base_value = float(cursor[0][3])
+        date_value = cursor[0][2]
+
+        base_rate = 1/base_value
+        base_value = float(amount)/base_value
+        
+
+
+    else:
+        
+        base_value = 1.
+    
+        
+    date_values[base]=date_value
+
+
+    if result != "USD":
+
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+
+        cursor.execute("SELECT MAX(id),name_coin,datetime,coinvalue FROM currency_exchange WHERE name_coin=? ",(result,))
+        cursor = cursor.fetchall()
+        
+        connection.commit()
+        connection.close()
+
+
+        result_value = float(cursor[0][3])
+        date_value = cursor[0][2]
+
+    else:
+
+        result_value = 1.
+    
+
+    if base == result:
+        value = 1.
+        
+    else:
+        rate = (base_rate * result_value)
+        value = (base_value * result_value)
+
+
+
+
+    date_values[result]=date_value
+
+    updated = date_values.get(min(date_values))
+        
+    dataframe = { "base":base , "amount":amount, "result": { result:round((value),2) , "rate":round((rate),5) }}
+    
+
+        
+    return jsonify(dataframe)
+
+
 
 @app.route("/currencies")
 def route():
