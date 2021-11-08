@@ -81,6 +81,7 @@ def fetch_one():
 
     if base == result:
         value = 1.
+        date_value = None
         
     else:
         value = round((base_value * result_value),5)
@@ -109,8 +110,7 @@ def fetch_multi():
     
 
     values = {}
-    date_values = {}
-    date_value = "null"
+    
 
 
 
@@ -126,16 +126,17 @@ def fetch_multi():
         connection.close()
 
         base_value = float(cursor[0][3])
-        date_value = cursor[0][2]
-
         base_value = 1/base_value
+
+       
+        
 
     else:
             
         base_value = 1.
 
     
-    date_values[base]=date_value 
+
         
 
 
@@ -155,7 +156,7 @@ def fetch_multi():
             connection.close()
 
             result_value = float(cursor[0][3])
-            date_value = cursor[0][2]
+            
             
 
         else:
@@ -166,22 +167,23 @@ def fetch_multi():
         if base == result:
             value = 1.
             
+            
         else:
             value = round((base_value * result_value),5)
 
 
 
-        date_values[result]=date_value
+        
         
         values[result]=value
 
         
-    updated = date_values.get(min(date_values))
+    
 
     
     
 
-    dataframe = { "base":base , "results":values , "updated": updated}
+    dataframe = { "base":base , "results":values }
     
 
         
@@ -211,14 +213,14 @@ def fetch_all():
         connection.close()
 
         base_value = float(cursor[0][3])
-        date_value = cursor[0][2]
+        
 
         base_value = 1/base_value
 
     else:
         base_value = 1.
 
-    date_values[base]=date_value
+    
 
 
 
@@ -248,7 +250,7 @@ def fetch_all():
         connection.close()
 
         result_value = float(cursor[0][3])
-        date_value = cursor[0][2]
+        
 
 
         if base == result:
@@ -258,17 +260,17 @@ def fetch_all():
             value = round((base_value * result_value),5)
 
 
-        date_values[result]=date_value
+        
         values[result]=value
-        print(date_values)
+        
     
     values["USD"]=round((base_value),5)
 
 
-    updated = date_values.get(min(date_values))
+    
 
 
-    dataframe = { "base":base , "results":values , "updated": updated}
+    dataframe = { "base":base , "results":values }
     
 
         
@@ -284,8 +286,7 @@ def convert():
     result = request.args.get("to")
     amount = request.args.get("amount")
 
-    date_values = {}
-    date_value = "null"
+  
 
 
     if base != "USD":
@@ -301,7 +302,7 @@ def convert():
 
         
         base_value = float(cursor[0][3])
-        date_value = cursor[0][2]
+        
 
         base_rate = 1/base_value
         base_value = float(amount)/base_value
@@ -313,7 +314,7 @@ def convert():
         base_value = 1.
     
         
-    date_values[base]=date_value
+    
 
 
     if result != "USD":
@@ -329,7 +330,7 @@ def convert():
 
 
         result_value = float(cursor[0][3])
-        date_value = cursor[0][2]
+        
 
     else:
 
@@ -337,7 +338,8 @@ def convert():
     
 
     if base == result:
-        value = 1.
+        rate = 1
+        value = (base_value * result_value)
         
     else:
         rate = (base_rate * result_value)
@@ -346,9 +348,9 @@ def convert():
 
 
 
-    date_values[result]=date_value
+    
 
-    updated = date_values.get(min(date_values))
+    
         
     dataframe = { "base":base , "amount":amount, "result": { result:round((value),2) , "rate":round((rate),5) }}
     
@@ -534,6 +536,8 @@ def route():
 
         if currency in all_currencies:
             avaiable_currencies[currency]=all_currencies[currency]
+
+    avaiable_currencies["USD"]=all_currencies["USD"]
 
 
 
