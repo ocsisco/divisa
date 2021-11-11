@@ -4,7 +4,7 @@
 
 How to use "divisa"?
 
-``` [language]
+``` [python]
 Código en 
 varias líneas
 ```
