@@ -291,7 +291,7 @@ def convert():
 
 
 @app.route("/currencies")
-def route():
+def currencies():
 
     avaiable_currencies = {}
 
