@@ -4,6 +4,11 @@
 
 How to use "divisa"?
 
+``` [language]
+Código en 
+varias líneas
+```
+
 "divisa" consists of the next endpoints:
 /fetch-one
 /fetch-multi
