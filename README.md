@@ -17,9 +17,10 @@ How to use "divisa"?
 
 */fetch-one:*
 
-send: `/fetch-one?from=USD&to=EUR`
+if you send:
+`/fetch-one?from=USD&to=EUR`
 
-return: 
+the api return: 
 `{
   "base": "USD",
   "result": {
@@ -27,6 +28,8 @@ return:
   },
   "updated": "2021-11-11 11:18:24"
 }`
+
+
 
 /fetch-multi:
 
