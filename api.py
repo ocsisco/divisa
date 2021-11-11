@@ -255,7 +255,8 @@ def convert():
 
     else:
 
-        base_value = 1.0
+        base_rate = 1
+        base_value = float(amount)
 
     if result != "USD":
 
