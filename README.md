@@ -1,6 +1,8 @@
 # divisa
 
-"currency" is an api for currency exchange, it works in a similar way to the commercial apis available in the market.
+##DIVISA##
+
+**"Divisa" is an api for currency exchange, it works in a similar way to the commercial apis available in the market.**
 
 How to use "divisa"?
 
