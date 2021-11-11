@@ -16,9 +16,7 @@ How to use "divisa"?
 
 
 * /fetch-one:
-
 If you GET: */fetch-one?from=USD&to=EUR*
-
 the api return: 
 `{
   "base": "USD",
