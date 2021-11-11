@@ -30,7 +30,7 @@ the api return:
 
 
 
-* /fetch-multi:*separate paragraph*
+* /fetch-multi:
 
 If you GET: /fetch-multi?from=USD&to=EUR
 
