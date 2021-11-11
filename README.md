@@ -17,16 +17,16 @@ How to use "divisa"?
 
 /fetch-one:
 
-send: /fetch-one?from=USD&to=EUR
+send: `/fetch-one?from=USD&to=EUR`
 
 return: 
-{
+`{
   "base": "USD",
   "result": {
     "EUR": 0.87259
   },
   "updated": "2021-11-11 11:18:24"
-}
+}`
 
 /fetch-multi:
 
