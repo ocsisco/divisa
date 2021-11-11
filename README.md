@@ -30,7 +30,7 @@ the api return:
 
 
 
-/fetch-multi:
+* /fetch-multi:
 
 send: /fetch-multi?from=USD&to=EUR
 
@@ -43,7 +43,7 @@ return:
   }
 }
 
-/fetch-all:
+* /fetch-all:
 
 send: /fetch-all?from=USD
 
@@ -57,7 +57,7 @@ return:
   }
 }
 
-/convert
+* /convert
 
 send: /convert?from=GBP&to=USD&amount=200
 
@@ -71,7 +71,7 @@ return:
   }
 }
 
-/currencies
+* /currencies
 
 send: /currencies
 
