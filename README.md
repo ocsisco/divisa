@@ -19,7 +19,8 @@ How to use "divisa"?
 
 If you GET: */fetch-one?from=USD&to=EUR*
 
-the api return: 
+the api return:
+
 `{
   "base": "USD",
   "result": {
@@ -34,7 +35,8 @@ the api return:
 
 If you GET: */fetch-multi?from=USD&to=EUR*
 
-return:
+the api return:
+
 `{
   "base": "USD",
   "results": {
@@ -47,7 +49,8 @@ return:
 
 If you GET: */fetch-all?from=USD*
 
-return:
+the api return:
+
 `{
   "base": "USD",
   "results": {
@@ -61,7 +64,8 @@ return:
 
 If you GET: */convert?from=GBP&to=USD&amount=200*
 
-return: 
+the api return: 
+
 `{
   "amount": "200",
   "base": "GBP",
@@ -75,7 +79,8 @@ return:
 
 If you GET: */currencies*
 
-return: 
+the api return: 
+
 `{
   "EUR": "Euro",
   "GBP": "British Pound Sterling",
