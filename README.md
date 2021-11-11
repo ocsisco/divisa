@@ -15,7 +15,7 @@ How to use "divisa"?
 
 
 
-*/fetch-one:*
+* /fetch-one:
 
 if you send:
 `/fetch-one?from=USD&to=EUR`
