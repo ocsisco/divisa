@@ -25,6 +25,8 @@ def fetch_one():
     date_values = {}
     date_value = "null"
 
+    values = {}
+
     if base != "USD":
 
         connection = sqlite3.connect("database.db")
@@ -78,11 +80,13 @@ def fetch_one():
     else:
         value = round((base_value * result_value), 5)
 
+    values[result] = value
+
     date_values[result] = date_value
 
     updated = date_values.get(min(date_values))
 
-    dataframe = {"base": base, "results": value, "updated": updated}
+    dataframe = {"base": base, "results": values, "updated": updated}
 
     return jsonify(dataframe)
 
