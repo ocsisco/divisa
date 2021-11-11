@@ -5,8 +5,11 @@
 How to use "divisa"?
 
 ``` [python]
-Código en 
-varias líneas
+/fetch-one
+/fetch-multi
+/fetch-all
+/convert
+/currencies
 ```
 
 "divisa" consists of the next endpoints:
