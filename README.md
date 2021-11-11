@@ -3,6 +3,7 @@
 **"Divisa" is an api for currency exchange, it works in a similar way to the commercial apis available in the market**
 
 How to use "divisa"?
+"divisa" consists of the next endpoints:
 
 ``` [python]
 /fetch-one
@@ -12,12 +13,7 @@ How to use "divisa"?
 /currencies
 ```
 
-"divisa" consists of the next endpoints:
-/fetch-one
-/fetch-multi
-/fetch-all
-/convert
-/currencies
+
 
 /fetch-one:
 
