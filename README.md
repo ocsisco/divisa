@@ -35,50 +35,51 @@ the api return:
 If you GET: /fetch-multi?from=USD&to=EUR
 
 return:
-{
+`{
   "base": "USD",
   "results": {
     "EUR": 0.87208,
     "GBP": 0.74628
   }
-}
+}`
 
 * /fetch-all:
 
 If you GET: /fetch-all?from=USD
 
 return:
-{
+`{
   "base": "USD",
   "results": {
     "EUR": 0.87208,
     "GBP": 0.74633,
     "USD": 1.0
   }
-}
+}`
 
 * /convert
 
 If you GET: /convert?from=GBP&to=USD&amount=200
 
 return: 
-{
+`{
   "amount": "200",
   "base": "GBP",
   "result": {
     "USD": 268.02,
     "rate": 1.34011
   }
-}
+}`
 
 * /currencies
 
 If you GET: /currencies
 
-return: {
+return: 
+`{
   "EUR": "Euro",
   "GBP": "British Pound Sterling",
   "USD": "United States Dollar"
-}
+}`
 
 
