@@ -32,7 +32,7 @@ the api return:
 
 * /fetch-multi:
 
-If you GET: /fetch-multi?from=USD&to=EUR
+If you GET: */fetch-multi?from=USD&to=EUR
 
 return:
 `{
@@ -45,7 +45,7 @@ return:
 
 * /fetch-all:
 
-If you GET: /fetch-all?from=USD
+If you GET: */fetch-all?from=USD
 
 return:
 `{
@@ -59,7 +59,7 @@ return:
 
 * /convert
 
-If you GET: /convert?from=GBP&to=USD&amount=200
+If you GET: */convert?from=GBP&to=USD&amount=200
 
 return: 
 `{
@@ -73,7 +73,7 @@ return:
 
 * /currencies
 
-If you GET: /currencies
+If you GET: */currencies
 
 return: 
 `{
