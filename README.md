@@ -17,7 +17,7 @@ How to use "divisa"?
 
 * /fetch-one:
 
-If you send: */fetch-one?from=USD&to=EUR*
+If you GET: */fetch-one?from=USD&to=EUR*
 
 the api return: 
 `{
@@ -32,7 +32,7 @@ the api return:
 
 * /fetch-multi:
 
-send: /fetch-multi?from=USD&to=EUR
+If you GET: /fetch-multi?from=USD&to=EUR
 
 return:
 {
@@ -45,7 +45,7 @@ return:
 
 * /fetch-all:
 
-send: /fetch-all?from=USD
+If you GET: /fetch-all?from=USD
 
 return:
 {
@@ -59,7 +59,7 @@ return:
 
 * /convert
 
-send: /convert?from=GBP&to=USD&amount=200
+If you GET: /convert?from=GBP&to=USD&amount=200
 
 return: 
 {
@@ -73,7 +73,7 @@ return:
 
 * /currencies
 
-send: /currencies
+If you GET: /currencies
 
 return: {
   "EUR": "Euro",
